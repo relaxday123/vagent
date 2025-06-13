@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { useAuthContext } from "@/lib/context/auth-context"
-import { Button } from "@/components/ui/button"
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useAuthContext } from "@/lib/context/auth-context";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,30 +11,39 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
-import { User, LogOut, Settings, Shield, TrendingUp, Database, Calculator } from "lucide-react"
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import {
+  User,
+  LogOut,
+  Settings,
+  Shield,
+  TrendingUp,
+  Database,
+  Calculator,
+  Globe,
+} from "lucide-react";
 
 export function Navbar() {
-  const { user, loading, isAdmin, signOut } = useAuthContext()
-  const router = useRouter()
+  const { user, loading, isAdmin, signOut } = useAuthContext();
+  const router = useRouter();
 
   const handleSignOut = async () => {
-    await signOut()
-    router.push("/")
-    router.refresh()
-  }
+    await signOut();
+    router.push("/");
+    router.refresh();
+  };
 
   const getInitials = (name: string | null) => {
-    if (!name) return "U"
+    if (!name) return "U";
     return name
       .split(" ")
       .map((n) => n[0])
       .join("")
       .toUpperCase()
-      .slice(0, 2)
-  }
+      .slice(0, 2);
+  };
 
   return (
     <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -60,6 +69,12 @@ export function Navbar() {
                   Data Crawler
                 </Link>
                 <Link
+                  href="/web-scraper"
+                  className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  Web Scraper
+                </Link>
+                <Link
                   href="/comprehensive-scoring"
                   className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
                 >
@@ -80,6 +95,12 @@ export function Navbar() {
                 >
                   Credit Score
                 </Link>
+                <Link
+                  href="/wallet-scoring"
+                  className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  Wallet Scoring
+                </Link>
               </div>
             )}
           </div>
@@ -90,21 +111,37 @@ export function Navbar() {
             ) : user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                  <Button
+                    variant="ghost"
+                    className="relative h-8 w-8 rounded-full"
+                  >
                     <Avatar className="h-8 w-8">
-                      <AvatarImage src={user.profile?.avatar_url || ""} alt={user.profile?.full_name || ""} />
-                      <AvatarFallback>{getInitials(user.profile?.full_name)}</AvatarFallback>
+                      <AvatarImage
+                        src={user.profile?.avatar_url || ""}
+                        alt={user.profile?.full_name || ""}
+                      />
+                      <AvatarFallback>
+                        {getInitials(user.profile?.full_name)}
+                      </AvatarFallback>
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-56" align="end" forceMount>
                   <DropdownMenuLabel className="font-normal">
                     <div className="flex flex-col space-y-1">
-                      <p className="text-sm font-medium leading-none">{user.profile?.full_name || "User"}</p>
-                      <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
+                      <p className="text-sm font-medium leading-none">
+                        {user.profile?.full_name || "User"}
+                      </p>
+                      <p className="text-xs leading-none text-muted-foreground">
+                        {user.email}
+                      </p>
                       <div className="flex gap-1 mt-2">
                         {user.roles.map((role) => (
-                          <Badge key={role} variant={role === "admin" ? "default" : "secondary"} className="text-xs">
+                          <Badge
+                            key={role}
+                            variant={role === "admin" ? "default" : "secondary"}
+                            className="text-xs"
+                          >
                             {role}
                           </Badge>
                         ))}
@@ -131,7 +168,16 @@ export function Navbar() {
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link href="/comprehensive-scoring" className="cursor-pointer">
+                    <Link href="/web-scraper" className="cursor-pointer">
+                      <Globe className="mr-2 h-4 w-4" />
+                      <span>Web Scraper</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link
+                      href="/comprehensive-scoring"
+                      className="cursor-pointer"
+                    >
                       <Calculator className="mr-2 h-4 w-4" />
                       <span>Comprehensive Scoring</span>
                     </Link>
@@ -151,7 +197,10 @@ export function Navbar() {
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer">
+                  <DropdownMenuItem
+                    onClick={handleSignOut}
+                    className="cursor-pointer"
+                  >
                     <LogOut className="mr-2 h-4 w-4" />
                     <span>Log out</span>
                   </DropdownMenuItem>
@@ -171,5 +220,5 @@ export function Navbar() {
         </div>
       </div>
     </nav>
-  )
+  );
 }
